@@ -58,4 +58,4 @@ smtplib: 이메일 전송
 
 
 ## 📆간트차트
-![image](https://user-images.githubusercontent.com/117130749/205504942-cbde05ea-d637-4a86-ad34-6799ddcce7e1.png)# -
+![image](https://user-images.githubusercontent.com/117130749/205504942-cbde05ea-d637-4a86-ad34-6799ddcce7e1.png)
