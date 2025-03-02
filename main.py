@@ -32,12 +32,14 @@ convert_value 카테고리 한글 명
 #모든 사진들 관리 부분
 #===================================================================
 # 사진 불러오기 위한 변수
+
+
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\gongsul\Lost 112\build\assets\frame0") #사진 모아놓은 폴더 경로
+ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
 
 # 사진 불러오는 함수
 def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return ASSETS_PATH / path
 #===================================================================
 #===================================================================
 
@@ -155,61 +157,77 @@ def search_data(category_value,convert_value, user_email, keyword):
             signum= soup.find_all("tr")[temp+1]
             signum=signum.a["href"]
             return signum[-3:-2]
-
-        SN=search_signum(url,idxxx)
-        browser.get(url)# 주소안으로 접속
-        Id=browser.find_elements(By.TAG_NAME,"tr")[idxxx+1]
-        Id=Id.find_element(By.TAG_NAME,'a').text
         
+    
+        try:
+            SN=search_signum(url,idxxx)
+            browser.get(url)# 주소안으로 접속
+
+            tr_elements = browser.find.elements(By.TAG_NAME, "tr")
+
+            if idxxx + 1 < len(tr_elements):
+                Id=tr_elements[idxxx+1]
+                Id=Id.find_element(By.TAG_NAME,'a').text
+            else:
+                print(f"Index out of range: {idxxx + 1} is greater than the number of <tr> elements ({len(tr_elements)})")
+                Id = None  # 또는 적절한 예외 처리
+
+            if Id:
+
        
-        browser.get(find_info(category_value,convert_value,SN))#새로운 유실물창 접속
+                browser.get(find_info(category_value,convert_value,SN))#새로운 유실물창 접속
 
-        elem=browser.find_element(By.CLASS_NAME,"find_info").text
+                elem=browser.find_element(By.CLASS_NAME,"find_info").text
 
-        arr=elem.split("\n")
+                arr=elem.split("\n")
         
     
         
 
-        target1=re.compile("x")# 물품이름 타겟
-        target2=re.compile("y")# 물품 분류 타겟
+                target1=re.compile("x")# 물품이름 타겟
+                target2=re.compile("y")# 물품 분류 타겟
         
-        #습득물 제목에 입력한 키워드와 일치하는 부분 있는지 검사
-        p=re.compile(keyword)
-        m=p.search(arr[0])
+                #습득물 제목에 입력한 키워드와 일치하는 부분 있는지 검사
+                p=re.compile(keyword)
+                m=p.search(arr[0])
         
-        #키워드 입력 안 했을 경우
-        if keyword=='키워드 입력' or keyword==NONE:
-            if target2.search(arr[5])!='':# 물품분류가 맞는지 확인
-                if target1.search(arr[0])!='': # 습득물 명이 맞는지 확인
-                    if Id in l:  #리스트에 관리번호 있으면 다음으로
-                        pass
-                    else:       #리스트에 관리번호 없으면 메일 보내고 리스트에 관리번호 추가
-                        mail(user_email, arr)
-                        l.append(Id)
-                if (idxxx < 5):
-                    idxxx = idxxx + 1
-                    window.after(2000,while_hamsu)
-                elif (idxxx>=5):
-                    idxxx = 0
-                    window.after(2000,while_hamsu)    
+                #키워드 입력 안 했을 경우
+                if keyword=='키워드 입력' or keyword==NONE:
+                    if target2.search(arr[5])!='':# 물품분류가 맞는지 확인
+                        if target1.search(arr[0])!='': # 습득물 명이 맞는지 확인
+                            if Id in l:  #리스트에 관리번호 있으면 다음으로
+                                pass
+                            else:       #리스트에 관리번호 없으면 메일 보내고 리스트에 관리번호 추가
+                                mail(user_email, arr)
+                                l.append(Id)
+                        if (idxxx < 5):
+                            idxxx = idxxx + 1
+                            window.after(2000,while_hamsu)
+                        elif (idxxx>=5):
+                            idxxx = 0
+                            window.after(2000,while_hamsu)    
                     
-        #키워드 입력 했을 경우                
-        else:
-            if target2.search(arr[5])!='':# 물품분류가 맞는지 확인
-                if target1.search(arr[0])!='': # 습득물 명이 맞는지 확인
-                    if m!=None:  #키워드가 일치할 때
-                        if Id in l: 
-                            pass
-                        else:
-                            mail(user_email, arr)
-                            l.append(Id)
-                if (idxxx < 5):
-                    idxxx = idxxx + 1
-                    window.after(2000,while_hamsu)
-                elif (idxxx>=5):
-                    idxxx = 0
-                    window.after(2000,while_hamsu)
+                #키워드 입력 했을 경우                
+                else:
+                    if target2.search(arr[5])!='':# 물품분류가 맞는지 확인
+                        if target1.search(arr[0])!='': # 습득물 명이 맞는지 확인
+                            if m!=None:  #키워드가 일치할 때
+                                if Id in l: 
+                                    pass
+                                else:
+                                    mail(user_email, arr)
+                                    l.append(Id)
+                        if (idxxx < 5):
+                            idxxx = idxxx + 1
+                            window.after(2000,while_hamsu)
+                        elif (idxxx>=5):
+                            idxxx = 0
+                            window.after(2000,while_hamsu)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            # 오류 발생 시 idxxx 초기화 또는 적절한 예외 처리
+            idxxx = 0
+            window.after(2000, while_hamsu)            
 
     window.after(2000,while_hamsu)
             
