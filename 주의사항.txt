@@ -2,6 +2,7 @@ line 25에 사진 모아놓은 경로 사용자에 컴퓨터에 맞는 경로로
 assets폴더가 main.py와 같은 모듈에 있어야함
 파일에 있는 글꼴 모두 설치 후 실행
 
+설치 필수 모듈
 pip install selenium
 pip install requests
 pip install lxml
