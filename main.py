@@ -1,7 +1,9 @@
 '''
 Lost 112 알림이 
 만든이 : 7조
-
+GUI : 구교현
+WEB SCRAPING : 강태웅
+EMAIL NOTIFICATION : 정우성
 '''
 
 from pathlib import Path
