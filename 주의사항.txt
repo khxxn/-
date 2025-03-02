@@ -1,3 +1,8 @@
 line 25에 사진 모아놓은 경로 사용자에 컴퓨터에 맞는 경로로 변경
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\gongsul\Lost 112\build\assets\frame0") 
+assets폴더가 main.py와 같은 모듈에 있어야함
 파일에 있는 글꼴 모두 설치 후 실행
+
+pip install selenium
+pip install requests
+pip install lxml
+pip install beautifulsoup4
