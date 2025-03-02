@@ -41,8 +41,11 @@
 ### 기술 스택
 
 Tkinter: GUI 구현
+
 Selenium: 웹 스크래핑
+
 BeautifulSoup: HTML 파싱
+
 smtplib: 이메일 전송
 
 
